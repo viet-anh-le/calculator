@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun handleNumber(number : String){
-        if (checkNewExp == true){
+        if (checkNewExp){
             handleClear()
             checkNewExp = false;
         }
@@ -70,9 +70,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             lastOperator = operator
             currentInput = ""
             if (firstOperand!!.compareTo(firstOperand!!.toLong()) == 0){
-                smallView.text = "${firstOperand!!.toLong()} ${operator}"
+                smallView.text = String.format("${firstOperand!!.toLong()} ${operator}")
             }
-            else smallView.text = "${firstOperand} ${operator}"
+            else smallView.text = String.format("${firstOperand} ${operator}")
         }
     }
 
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun handleBS(){
-        if (currentInput.length != 0){
+        if (currentInput.isNotEmpty()){
             currentInput = currentInput.dropLast(1)
             updateDisplay()
         }
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     fun calculate(){
         if (firstOperand != null && currentInput.length != 0){
             val secondOperand = currentInput.toDouble();
-            smallView.text = "${smallView.text} ${textView.text} ="
+            smallView.text = String.format("${smallView.text} ${textView.text} =")
             val result = when (lastOperator){
                 '+' -> firstOperand!! + secondOperand
                 '-' -> firstOperand!! - secondOperand
@@ -116,11 +116,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             }
 
             if (result.compareTo(result.toLong()) == 0){
-                textView.text = result.toLong().toString()
+                textView.text = String.format(result.toLong().toString())
                 currentInput = result.toLong().toString()
             }
             else{
-                textView.text = result.toString()
+                textView.text = String.format(result.toString())
                 currentInput = result.toString()
             }
             firstOperand = null
