@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun updateDisplay(){
+        textView.textSize = 70f
         textView.text = if (currentInput.isEmpty()) "0" else currentInput
     }
 
@@ -111,7 +112,18 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 '+' -> firstOperand!! + secondOperand
                 '-' -> firstOperand!! - secondOperand
                 'x' -> firstOperand!! * secondOperand
-                '/' -> firstOperand!! / secondOperand
+                '/' -> if (secondOperand == 0.0) {
+                    textView.text = "Cannot divide by zero"
+                    textView.textSize = 40f
+                    firstOperand = null
+                    lastOperator = null
+                    currentInput = ""
+                    checkNewExp = true
+                    return
+                } else {
+                    textView.textSize = 70f
+                    firstOperand!! / secondOperand
+                }
                 else -> return
             }
 
