@@ -4,24 +4,34 @@
     android:orientation="vertical"
     android:padding="6dp" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
             android:layout_weight="2"
+            android:background="@color/white"
+            android:backgroundTint="@color/function_button_color"
             >
-                <TextView
-                    android:id="@+id/tvDisplay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:backgroundTint="@color/function_button_color"
-                    android:text="0"
-                    android:textSize="70sp"
-                    android:gravity="center|end"
-                    android:maxLines="1"
-                />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/small_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tvDisplay"
+                android:textSize="20sp"
+                android:layout_alignParentEnd="true"
+            />
+
+            <TextView
+                android:id="@+id/tvDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|end"
+                android:maxLines="1"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="0"
+                android:textSize="70sp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,7 +116,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="x"
-                android:textSize="30sp"
+                android:textSize="23sp"
                 android:backgroundTint="@color/function_button_color"
                 />
         </LinearLayout>

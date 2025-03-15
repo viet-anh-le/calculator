@@ -12,14 +12,17 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity(), OnClickListener {
     lateinit var textView : TextView
+    lateinit var smallView : TextView
     var currentInput : String = ""
     var lastOperator : Char? = null
     var firstOperand : Double? = null
+    var checkNewExp : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         textView = findViewById(R.id.tvDisplay)
+        smallView = findViewById(R.id.small_view)
 
         val btnIds = listOf(
             R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5, R.id.btn6, R.id.btn7,
@@ -46,6 +49,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun handleNumber(number : String){
+        if (checkNewExp == true){
+            handleClear()
+            checkNewExp = false;
+        }
         if (currentInput.length < 10){
             currentInput += number;
             updateDisplay();
@@ -53,20 +60,26 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun updateDisplay(){
-        textView.text = if (currentInput.isEmpty()) "0" else currentInput;
+        textView.text = if (currentInput.isEmpty()) "0" else currentInput
     }
 
     fun handleOperator(operator: Char){
         if (currentInput.length != 0){
+            checkNewExp = false
             firstOperand = currentInput.toDouble()
             lastOperator = operator
             currentInput = ""
+            if (firstOperand!!.compareTo(firstOperand!!.toLong()) == 0){
+                smallView.text = "${firstOperand!!.toLong()} ${operator}"
+            }
+            else smallView.text = "${firstOperand} ${operator}"
         }
     }
 
     fun handleCE(){
         currentInput =  ""
         textView.text = "0"
+        if (lastOperator == null) smallView.text = ""
     }
 
     fun handleClear(){
@@ -74,6 +87,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         firstOperand = null
         lastOperator = null
         textView.text = "0"
+        smallView.text = ""
     }
 
     fun handleBS(){
@@ -84,15 +98,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun toggleSign(){
-        if (currentInput.length != 0 && currentInput != "0"){
-            currentInput = if (currentInput[0] == '-') currentInput.substring(1) else "-${currentInput}"
-            updateDisplay()
-        }
+        checkNewExp = false
+        currentInput = if (currentInput.length != 0 && currentInput[0] == '-') currentInput.substring(1) else "-${currentInput}"
+        updateDisplay()
     }
 
     fun calculate(){
         if (firstOperand != null && currentInput.length != 0){
             val secondOperand = currentInput.toDouble();
+            smallView.text = "${smallView.text} ${textView.text} ="
             val result = when (lastOperator){
                 '+' -> firstOperand!! + secondOperand
                 '-' -> firstOperand!! - secondOperand
@@ -101,10 +115,17 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 else -> return
             }
 
-            textView.text = result.toString()
-            currentInput = result.toString()
+            if (result.compareTo(result.toLong()) == 0){
+                textView.text = result.toLong().toString()
+                currentInput = result.toLong().toString()
+            }
+            else{
+                textView.text = result.toString()
+                currentInput = result.toString()
+            }
             firstOperand = null
             lastOperator = null
+            checkNewExp = true
         }
     }
 }
